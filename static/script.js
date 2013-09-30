@@ -41,6 +41,7 @@ $(function() {
     function identity() {return slice.call(arguments);}
     function cend(func, args) {return function() {func.apply(this, slice.call(arguments).concat(args));};}
     function htmlentities(data) {
+        if (!data) return '';
         return data.toString()
                    .replace(/&/g, '&amp;')
                    .replace(/</g, '&lt;')

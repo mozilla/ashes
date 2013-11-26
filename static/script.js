@@ -25,14 +25,6 @@ $(function() {
                 localStorage.setItem('email', email = data.email);
                 body.addClass('logged-in');
             });
-        },
-        onlogout: function() {
-            token = null;
-            body.removeClass('logged-in');
-            try {
-                localStorage.clearItem('token');
-                localStorage.clearItem('email');
-            } catch (e) {}
         }
     });
 

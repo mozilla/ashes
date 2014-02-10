@@ -53,9 +53,7 @@ def corsify(*args, **kwargs):
         @wraps(func)
         def wrap(*args, **kwargs):
             # Don't allow insecure connections in prod.
-            if (False and
-                not request.url.startswith('https:') and
-                not DEBUG):
+            if request.url.startswith('http:') and not DEBUG:
                 redir = redirect(request.url.replace('http:', 'https:', 1),
                                  code=301)
                 redir.headers['Redirecting-From'] = request.url
@@ -201,6 +199,9 @@ if __name__ == '__main__':
             help='port', metavar='PORT', default=os.getenv('PORT', '5000'))
     parser.add_option('--host', dest='hostname',
             help='hostname', metavar='HOSTNAME', default='0.0.0.0')
+    parser.add_option('--no-debug', dest='debug', help='disable debugging',
+            action="store_false", default=True)
     (options, args) = parser.parse_args()
+    DEBUG = options.debug
     app.debug = DEBUG
     app.run(host=options.hostname, port=int(options.port))

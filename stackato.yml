@@ -3,7 +3,7 @@ framework:
     type: python
 
 processes:
-    web: python main.py
+    web: python main.py --no-debug
 
 services:
     ${name}-db: mongodb

@@ -53,7 +53,14 @@ def corsify(*args, **kwargs):
         @wraps(func)
         def wrap(*args, **kwargs):
             # Don't allow insecure connections in prod.
-            if request.url.startswith('http:') and not DEBUG:
+            criteria = [
+                request.is_secure,
+                DEBUG,
+                request.headers.get('X-Forwarded-Proto', 'http') == 'https',
+            ]
+            # Only redirect if the request is not secure (we see http but SSL
+            # was terminated by webserver).
+            if not any(criteria) and request.url.startswith('http:'):
                 redir = redirect(request.url.replace('http:', 'https:', 1),
                                  code=301)
                 redir.headers['Redirecting-From'] = request.url
